@@ -11,7 +11,7 @@ packer {
   }
 }
 
-source "vmware-iso" "ubuntu-2404" {
+source "vmware-iso" "ubuntu-2404-iso" {
   vm_name       = local.vm_name
   guest_os_type = "arm-ubuntu-64"
   version       = 20
@@ -41,7 +41,7 @@ source "vmware-iso" "ubuntu-2404" {
   shutdown_command = "sudo shutdown -P now"
 
   http_directory   = "http"
-  output_directory = "build/"
+  output_directory = "build/${local.vm_name}-vmx"
 
   boot_wait    = "5s"
   boot_command = [
@@ -62,29 +62,5 @@ locals {
 }
 
 build {
-  sources = ["sources.vmware-iso.ubuntu-2404"]
-
-  post-processors {
-    post-processor "vagrant" {
-      include = [
-        "build/disk-s001.vmdk",
-        "build/disk-s002.vmdk",
-        "build/disk-s003.vmdk",
-        "build/disk-s004.vmdk",
-        "build/disk-s005.vmdk",
-        "build/disk.vmdk",
-        "build/${local.vm_name}.nvram",
-        "build/${local.vm_name}.vmsd",
-        "build/${local.vm_name}.vmx",
-        "build/${local.vm_name}.vmxf",
-      ]
-      output               = "living-etc/${local.vm_name}.box"
-      vagrantfile_template = "Vagrantfile"
-    }
-
-    post-processor "vagrant-cloud" {
-      box_tag = "living-etc/${local.vm_name}"
-      version = "${local.version}"
-    }
-  }
+  sources = ["sources.vmware-iso.ubuntu-2404-iso"]
 }

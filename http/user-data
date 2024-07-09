@@ -2,8 +2,6 @@
 autoinstall:
   version: 1
   locale: en_GB.UTF-8
-  early-commands:
-    - systemctl stop ssh
   identity:
     hostname: ubuntu-server
     username: ubuntu
